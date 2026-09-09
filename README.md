@@ -31,12 +31,18 @@ A retrieval-augmented (RAG) chatbot that answers natural-language questions abou
 
 ```
 StockSensei/
-├─ StockSensei.ipynb   # full pipeline: data fetch, indexing, RAG chain, evaluation, UI
+├─ StockSensei.ipynb        # notebook version: data fetch, indexing, RAG chain, evaluation, UI
+├─ stocksensei_gradio.py    # standalone script version of the same app
 └─ README.md
 ```
 
+Two ways to run the same core idea:
+- **`StockSensei.ipynb`** — the full notebook, including the answer-evaluation harness (scores generated answers against actual stock data) and a richer Gradio UI with a metrics dashboard and example questions.
+- **`stocksensei_gradio.py`** — a lightweight standalone script version of the same RAG pipeline, for running outside a notebook (e.g. `python stocksensei_gradio.py`).
+
 ## How to run
 
+### Notebook
 1. Install dependencies:
    ```bash
    pip install langchain langchain-community langchain-openai faiss-cpu yfinance gradio sentence-transformers
@@ -45,8 +51,19 @@ StockSensei/
 3. The app launches a Gradio interface (with a shareable public link via `demo.launch(share=True)`).
 4. Ask questions about the sample portfolio (AAPL, GOOGL, TSLA, MSFT, NVDA) or edit the `portfolio` DataFrame to use your own holdings.
 
+### Script
+1. Install the same dependencies as above.
+2. Set your OpenAI API key as an environment variable (never hardcode it in the file):
+   ```bash
+   export OPENAI_API_KEY="your-key-here"
+   ```
+3. Run:
+   ```bash
+   python stocksensei_gradio.py
+   ```
+
 ## Notes
 
 - The current portfolio is hardcoded as sample data — swap in real holdings by editing the `portfolio` DataFrame.
-- Requires an OpenAI API key at runtime
+- Requires an OpenAI API key at runtime; none is stored in the notebook.
 - The evaluation harness (`evaluate_response` / `calculate_metrics`) is a nice touch worth highlighting — it's not just a chatbot demo, it tracks whether the model's numeric claims actually match the retrieved data.
